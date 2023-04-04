@@ -1,12 +1,13 @@
 // // Initialize Firebase
 
 var config = {
-    apiKey: "AIzaSyBUvXdnEULdtBJCRMfFM_mWOQNdDlD-g34",
-    authDomain: "patient-tracker-app-8c634.firebaseapp.com",
-    databaseURL: "https://patient-tracker-app-8c634.firebaseio.com",
-    projectId: "patient-tracker-app-8c634",
-    storageBucket: "",
-    messagingSenderId: "934358866547"
+    apiKey: "AIzaSyDQ4Ic9yAYfaexhXCpElPv-DJr2la5ZOxE",
+    authDomain: "patienttracker-a460e.firebaseapp.com",
+    databaseURL: "https://patienttracker-a460e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "patienttracker-a460e",
+    storageBucket: "patienttracker-a460e.appspot.com",
+    messagingSenderId: "402200494814",
+    appId: "1:402200494814:web:cd2ad0245929a73343f84f"
 };
 
 var firebase = firebase.initializeApp(config);
