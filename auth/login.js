@@ -1,4 +1,7 @@
 // // Initialize Firebase
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database"; 
 
 var config = {
     apiKey: "AIzaSyDQ4Ic9yAYfaexhXCpElPv-DJr2la5ZOxE",
