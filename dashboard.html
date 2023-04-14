@@ -8,14 +8,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js"></script>
-
-    <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js"></script>
-
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js"></script>
 
     <!-- font -->
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -32,8 +24,6 @@
             messagingSenderId: "402200494814",
             appId: "1:402200494814:web:cd2ad0245929a73343f84f"
         };
-
-        var firebase = firebase.initializeApp(config);
 
     </script>
 
@@ -111,9 +101,21 @@
 
     <footer class="mt-4 py-4 "></footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js'
+    
+        // If you enabled Analytics in your project, add the Firebase SDK for Google Analytics
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js'
+    
+        // Add Firebase products that you want to use
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js'
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
+
+        var firebase = initializeApp(config);
+
         document.getElementById("logoutBtn").addEventListener("click", function () {
-            firebase.auth().signOut()
+            const auth = getAuth()
+            signOut(auth)
                 .then(function () {
                     console.log("Logged out!");
                     localStorage.removeItem('user');
@@ -122,8 +124,11 @@
                 })
         });
 
-        firebase.auth().onAuthStateChanged(function (user) {
+
+        const auth = getAuth()
+        onAuthStateChanged(auth, function (user) {
             if (!user) {
+                alert("Logged out successfully!")
                 window.location.href = "./LoginPage.html";
             }
         });

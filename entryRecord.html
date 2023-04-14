@@ -9,14 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
     crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js"></script>
-
-    <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js"></script>
-
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js"></script>
+    
 
     <link rel="stylesheet" href="./font-awesome-4.7.0/css/font-awesome.min.css">
 
@@ -35,8 +28,6 @@
             messagingSenderId: "402200494814",
             appId: "1:402200494814:web:cd2ad0245929a73343f84f"
         };
-
-        var firebase = firebase.initializeApp(config);
 
     </script>
 
@@ -161,9 +152,30 @@
     </section>
     <footer class="mt-4 py-4 footer-length"></footer>
 
-    <script>
+    <script type="module" >
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js'
+        import { getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js'
+    
+        // If you enabled Analytics in your project, add the Firebase SDK for Google Analytics
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js'
+    
+        // Add Firebase products that you want to use
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js'
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
+        
+        const config = {
+            apiKey: "AIzaSyDQ4Ic9yAYfaexhXCpElPv-DJr2la5ZOxE",
+            authDomain: "patienttracker-a460e.firebaseapp.com",
+            databaseURL: "https://patienttracker-a460e-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "patienttracker-a460e",
+            storageBucket: "patienttracker-a460e.appspot.com",
+            messagingSenderId: "402200494814",
+            appId: "1:402200494814:web:cd2ad0245929a73343f84f"
+        };
+        const firebase = initializeApp(config)
+        var auth = getAuth()
         document.getElementById("logoutBtn").addEventListener("click", function () {
-            firebase.auth().signOut()
+            signOut(auth)
                 .then(function () {
                     console.log("Logged out!");
                 }).catch(function (error) {
@@ -171,7 +183,7 @@
                 })
         });
 
-        firebase.auth().onAuthStateChanged(function (user) {
+        onAuthStateChanged(auth, function (user) {
             if (!user) {
                 window.location.href = "./LoginPage.html";
             }
@@ -184,7 +196,8 @@
 
         // Writing in database
 
-        document.getElementById("appointmentForm").addEventListener("submit", (event) => {
+        const onSubmit = (event) => {
+            if(event)
             event.preventDefault();
 
             let patientId = document.getElementById("patientId").value;
@@ -225,7 +238,8 @@
             console.log(user.uid);
             console.log(patientObj.patientName);
             console.log(user.uid);
-            let database = firebase.database().ref(user.uid).child(patientObj.patientName).child("Appointments").push(patientObj)
+            let db = getDatabase(firebase)
+            set(ref(db , "users/" + user.uid + "/patient/" + patientObj.patientName + "/Appointments/"+ patientObj.appointmentDate ), (patientObj))
                 .then(() => {
                     document.getElementById("patientId").value = '';
                     document.getElementById("appointmentDate").value = '';
@@ -243,8 +257,12 @@
                 }).catch((error) => {
                     console.log(error.message);
                 })
+            alert("Record saved successfully")
+            }
 
-        });
+        document.getElementById("appointmentForm").addEventListener("submit", onSubmit);
+
+        onSubmit()
 
 // Reading from DB;
     // firebase.database().ref(user.uid).child("Patients").on("value" , (snapshot)=>{

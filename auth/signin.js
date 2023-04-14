@@ -1,10 +1,19 @@
 
 // // Initialize Firebase
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/database";
+// import firebase from "./firebase/app";
+// import "./firebase/auth";
+// import "./firebase/database";
 
-var config = {
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js'
+    
+// If you enabled Analytics in your project, add the Firebase SDK for Google Analytics
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js'
+
+// Add Firebase products that you want to use
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js'
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
+
+const config = {
     apiKey: "AIzaSyDQ4Ic9yAYfaexhXCpElPv-DJr2la5ZOxE",
     authDomain: "patienttracker-a460e.firebaseapp.com",
     databaseURL: "https://patienttracker-a460e-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -14,7 +23,7 @@ var config = {
     appId: "1:402200494814:web:cd2ad0245929a73343f84f"
 };
 
-var firebase = firebase.initializeApp(config);
+var firebase = initializeApp(config);
 
 console.log("Firebase Running");
 console.log("Details", firebase);
@@ -39,12 +48,12 @@ document.getElementById("signupForm").addEventListener("submit", function (event
     let dateOfBirth = document.getElementById("dateOfBirth").value;
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
+    
+    
+    
+    let auth =    getAuth();
 
-
-
-    let auth =    firebase.auth();
-
-    auth.createUserWithEmailAndPassword(email,password)
+    createUserWithEmailAndPassword(auth, email,password)
     .then(function(data){
 
         localStorage.setItem("user", JSON.stringify(data.user));
@@ -58,9 +67,11 @@ document.getElementById("signupForm").addEventListener("submit", function (event
    
        });
 
+       let auth =   getAuth();
 
-firebase.auth().onAuthStateChanged( function(user){
+       onAuthStateChanged( auth, function(user){
     if(user){
+        alert("Signed up succesfully!")
         window.location.href = "../dashboard.html";
     }
     else{
